@@ -24,6 +24,8 @@ class RandomBreedImageActivity : ComponentActivity() {
 
 	companion object {
 		const val BREED_VALUE_KEY = "BREED_VALUE_KEY"
+		const val IS_SUBBREED_KEY = "IS_SUBBREED_KEY"
+		const val SUBBREED_VALUE_KEY = "SUBBREED_VALUE_KEY"
 	}
 
 	private lateinit var viewModel: RandomBreedImageViewModel
@@ -33,8 +35,10 @@ class RandomBreedImageActivity : ComponentActivity() {
 		enableEdgeToEdge()
 
 		val breed = intent.getStringExtra(BREED_VALUE_KEY) ?: ""
+		val isSubBreed = intent.getBooleanExtra(IS_SUBBREED_KEY, false)
+		val subBreed = intent.getStringExtra(SUBBREED_VALUE_KEY)
 		viewModel = ViewModelProvider.create(
-			this, RandomBreedImageViewModelFactory(breed))[RandomBreedImageViewModel::class.java]
+			this, RandomBreedImageViewModelFactory(breed, isSubBreed, subBreed))[RandomBreedImageViewModel::class.java]
 
 		setContent {
 			DogStuffTheme {

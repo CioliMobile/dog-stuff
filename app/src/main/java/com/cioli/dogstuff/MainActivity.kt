@@ -77,7 +77,7 @@ class MainActivity : ComponentActivity() {
 	fun BreedRow(@PreviewParameter(SampleDogBreedProvider::class) breed: DogBreed) {
 		Card(
 			modifier = Modifier.padding(8.dp).fillMaxWidth().clickable {
-				viewModel.breedSelected(breed.breedName, this)
+				viewModel.breedSelected(breed.breedName, breed.isSubBreed, this, breed.subBreedName)
 			},
 			elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
 			colors = CardDefaults.cardColors(containerColor = Color(0xFFF7F2F9))
@@ -88,7 +88,7 @@ class MainActivity : ComponentActivity() {
 			) {
 				Row(verticalAlignment = Alignment.CenterVertically) {
 					Text(
-						breed.breedName.capitalizeWords(),
+						breed.displayBreedName.capitalizeWords(),
 						fontFamily = FontFamily.Serif,
 						fontWeight = FontWeight.SemiBold
 					)
@@ -125,7 +125,8 @@ class MainActivity : ComponentActivity() {
 
 class SampleDogBreedProvider: PreviewParameterProvider<DogBreed> {
 	override val values: Sequence<DogBreed> = sequenceOf(
-		DogBreed("snoop dogg"), DogBreed("glorious dog breed")
+		DogBreed("snoop dogg", "snoop dogg"),
+		DogBreed("glorious dog breed", "glorious dog breed")
 	)
 }
 

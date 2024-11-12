@@ -20,7 +20,11 @@ sealed interface RandomBreedImageUiState {
 	data object Loading: RandomBreedImageUiState
 }
 
-class RandomBreedImageViewModel(private var breedString: String): ViewModel() {
+class RandomBreedImageViewModel(
+	private var breedString: String,
+	private val isSubBreed: Boolean,
+	private var subBreedString: String? = null
+): ViewModel() {
 	var randomBreedImageUiState: RandomBreedImageUiState by
 		mutableStateOf(RandomBreedImageUiState.Loading)
 		private set
@@ -38,7 +42,11 @@ class RandomBreedImageViewModel(private var breedString: String): ViewModel() {
 
 	private fun populateData() {
 		randomBreedImageUiState = RandomBreedImageUiState.Loading
-		val call = dogApi.getRandomImageFor(breedString)
+		val call = if (isSubBreed) {
+			dogApi.getRandomImageForSubBreed(breedString, subBreedString!!)
+		} else {
+			dogApi.getRandomImageForBreed(breedString)
+		}
 		call.enqueue(object: Callback<BreedImageResponse> {
 			override fun onResponse(p0: Call<BreedImageResponse>, p1: Response<BreedImageResponse>) {
 				if (p1.isSuccessful && p1.body() != null) {
@@ -56,8 +64,12 @@ class RandomBreedImageViewModel(private var breedString: String): ViewModel() {
 	}
 }
 
-class RandomBreedImageViewModelFactory(private var breed: String) : ViewModelProvider.Factory {
+class RandomBreedImageViewModelFactory(
+	private var breed: String,
+	private var isSubBreed: Boolean,
+	private var subBreedString: String?
+) : ViewModelProvider.Factory {
 	override fun <T : ViewModel> create(modelClass: Class<T>): T {
-		return RandomBreedImageViewModel(breed) as T
+		return RandomBreedImageViewModel(breed, isSubBreed, subBreedString) as T
 	}
 }

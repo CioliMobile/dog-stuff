@@ -59,9 +59,13 @@ class MainActivityViewModel: ViewModel() {
 		})
 	}
 
-	fun breedSelected(breedValue: String, context: Context) {
+	fun breedSelected(breedValue: String, isSubBreed: Boolean, context: Context, subBreedValue: String? = null) {
 		val intent = Intent(context, RandomBreedImageActivity::class.java)
 		intent.putExtra(RandomBreedImageActivity.BREED_VALUE_KEY, breedValue)
+		intent.putExtra(RandomBreedImageActivity.IS_SUBBREED_KEY, isSubBreed)
+		if (isSubBreed) {
+			intent.putExtra(RandomBreedImageActivity.SUBBREED_VALUE_KEY, subBreedValue)
+		}
 		context.startActivity(intent)
 	}
 }

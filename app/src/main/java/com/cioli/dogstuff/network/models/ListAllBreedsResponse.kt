@@ -9,11 +9,11 @@ class ListAllBreedsResponse(
 		val breedList = ArrayList<DogBreed>()
 		message.keys.forEach { k ->
 			val subBreeds = message[k]
-			val mainBreed = DogBreed(k, subBreeds ?: arrayListOf())
+			val mainBreed = DogBreed(k, k,subBreeds ?: arrayListOf())
 			breedList.add(mainBreed)
 			if (subBreeds != null) {
 				for (sb in subBreeds) {
-					breedList.add(DogBreed("$k, $sb"))
+					breedList.add(DogBreed(k,"$k - $sb", subBreedName = sb))
 				}
 			}
 		}

@@ -11,5 +11,8 @@ interface DogApiInterface {
 	fun getListOfBreeds(): Call<ListAllBreedsResponse>
 
 	@GET("breed/{breed}/images/random/")
-	fun getRandomImageFor(@Path("breed") breed: String): Call<BreedImageResponse>
+	fun getRandomImageForBreed(@Path("breed") breed: String): Call<BreedImageResponse>
+
+	@GET("breed/{breed}/{subbreed}/images/random")
+	fun getRandomImageForSubBreed(@Path("breed") breed: String, @Path("subbreed") subBreed: String) : Call<BreedImageResponse>
 }
