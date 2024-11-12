@@ -59,6 +59,7 @@ class RandomBreedImageViewModel(
 
 			override fun onFailure(p0: Call<BreedImageResponse>, p1: Throwable) {
 				Log.d("NETWORK", "FAILED CALL TO BREED IMAGE")
+				randomBreedImageUiState = RandomBreedImageUiState.Error
 			}
 		})
 	}
