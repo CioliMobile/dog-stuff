@@ -70,6 +70,6 @@ class MainActivityViewModel: ViewModel() {
 	}
 
 	fun retryFetchBreedList() {
-		popuL
+		populateData()
 	}
 }
