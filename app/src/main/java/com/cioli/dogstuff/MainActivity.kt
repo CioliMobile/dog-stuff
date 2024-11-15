@@ -1,5 +1,6 @@
 package com.cioli.dogstuff
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -15,24 +16,24 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CardElevation
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.ComposeCompilerApi
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import com.cioli.dogstuff.model.DogBreed
 import com.cioli.dogstuff.ui.theme.DogStuffTheme
@@ -51,11 +52,11 @@ class MainActivity : ComponentActivity() {
 
 		setContent {
 			DogStuffTheme {
-				Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+				Scaffold(modifier = Modifier.fillMaxSize()) { _ ->
 					when (viewModel.mainActivityUiState) {
 						MainActivityUiState.Loading -> LoadingView()
 						MainActivityUiState.Error -> ErrorView()
-						MainActivityUiState.Success -> MainView(Modifier.padding(innerPadding))
+						MainActivityUiState.Success -> MainView()
 					}
 				}
 			}
@@ -63,7 +64,7 @@ class MainActivity : ComponentActivity() {
 	}
 
 	@Composable
-	fun MainView(mod: Modifier) {
+	fun MainView() {
 		LazyColumn {
 			items(viewModel.allBreeds!!.size) { index ->
 				val breed = viewModel.allBreeds!![index]
@@ -72,15 +73,15 @@ class MainActivity : ComponentActivity() {
 		}
 	}
 
-	@Preview
+	@Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+	@Preview(name="Light Mode", showBackground = true)
 	@Composable
 	fun BreedRow(@PreviewParameter(SampleDogBreedProvider::class) breed: DogBreed) {
 		Card(
 			modifier = Modifier.padding(8.dp).fillMaxWidth().clickable {
 				viewModel.breedSelected(breed.breedName, breed.isSubBreed, this, breed.subBreedName)
 			},
-			elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
-			colors = CardDefaults.cardColors(containerColor = Color(0xFFF7F2F9))
+			elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
 			) {
 			Column(
 				modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 24.dp, bottom = 24.dp),
@@ -99,7 +100,8 @@ class MainActivity : ComponentActivity() {
 		}
 	}
 
-	@Preview
+	@Preview("Light Mode", showBackground = true)
+	@Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 	@Composable
 	fun LoadingView() {
 		Column(
@@ -116,10 +118,26 @@ class MainActivity : ComponentActivity() {
 		}
 	}
 
-	@Preview
+	@Preview("Light Mode",showBackground = true)
+	@Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 	@Composable
 	fun ErrorView() {
-
+		Column(
+			modifier = Modifier.fillMaxSize(),
+			verticalArrangement = Arrangement.Center,
+			horizontalAlignment = Alignment.CenterHorizontally
+		) {
+			Text("Error Loading Breeds :(",
+				fontSize = 40.sp,
+				modifier = Modifier.padding(8.dp),
+				textAlign = TextAlign.Center
+			)
+			Button(onClick = {
+				viewModel.retryFetchBreedList()
+			}) {
+				Text("Retry")
+			}
+		}
 	}
 }
 
@@ -128,8 +146,4 @@ class SampleDogBreedProvider: PreviewParameterProvider<DogBreed> {
 		DogBreed("snoop dogg", "snoop dogg"),
 		DogBreed("glorious dog breed", "glorious dog breed")
 	)
-}
-
-class SampleModifierProvider: PreviewParameterProvider<Modifier> {
-	override val values = sequenceOf(Modifier.padding(8.dp))
 }

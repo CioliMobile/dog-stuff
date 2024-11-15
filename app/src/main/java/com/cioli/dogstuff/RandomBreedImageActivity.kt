@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,6 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
+import com.cioli.dogstuff.network.DogApiInterface
 import com.cioli.dogstuff.ui.theme.DogStuffTheme
 import com.cioli.dogstuff.viewmodel.RandomBreedImageUiState
 import com.cioli.dogstuff.viewmodel.RandomBreedImageViewModel
@@ -62,7 +65,12 @@ class RandomBreedImageActivity : ComponentActivity() {
 			verticalArrangement = Arrangement.Center,
 			horizontalAlignment = Alignment.CenterHorizontally
 		) {
-			AsyncImage(model = viewModel.breedImageUrl, contentDescription = "dog")
+			AsyncImage(
+				model = viewModel.breedImageUrl,
+				contentDescription = "dog",
+				modifier = modifier.fillMaxWidth()
+					.padding(top = 24.dp)
+			)
 		}
 	}
 

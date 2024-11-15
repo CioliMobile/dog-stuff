@@ -68,4 +68,8 @@ class MainActivityViewModel: ViewModel() {
 		}
 		context.startActivity(intent)
 	}
+
+	fun retryFetchBreedList() {
+		popuL
+	}
 }
